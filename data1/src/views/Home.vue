@@ -1,18 +1,42 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input type="text" v-model="inputVal" />
+    <button @click="clickEventBind">提交</button>
+    <ul>
+      <li v-for="(item,index) in list" :key="index">{{item}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import axios from 'axios'
 export default {
-  name: 'home',
+  name: "home",
+  data() {
+    return {
+      inputVal: ""
+      // list:[]
+    };
+  },
+  computed: {
+    list() {
+      return this.$store.state.list;
+    }
+  },
+  methods: {
+    clickEventBind() {
+      this.$store.commit("EventValue", this.inputVal);
+      this.inputVal = "";
+    }
+  },
+  watch: {
+    //监听input value值得变化
+    inputVal(v) {
+      // console.log(v,'v')
+    }
+  },
   components: {
-    HelloWorld
   }
-}
+};
 </script>
