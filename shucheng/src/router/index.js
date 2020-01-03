@@ -18,12 +18,22 @@ const routes = [
   {
     path: '/paihang',
     name: 'paihang',
-    component: () => import(/* webpackChunkName: "home" */ '../views/PaiHang.vue')
+    component: () => import(/* webpackChunkName: "home" */ '../views/PaiHang.vue'),
+    meta:{
+      requireAuth:true
+    }
+    
   },
   {
     path: '/shujia',
     name: 'shujia',
     component: () => import(/* webpackChunkName: "home" */ '../views/BookJia.vue')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "home" */ '../views/login.vue')
+ 
   }
 
 ]
@@ -34,4 +44,20 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (localStorage.getItem('token')) {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {
+          path: to.fullPath
+        }
+      })
+    }
+  } else {
+    next()
+  }
+})
 export default router
